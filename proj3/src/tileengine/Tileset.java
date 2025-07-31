@@ -34,6 +34,10 @@ public class Tileset {
     public static final TETile TREE = new TETile('♠', Color.green, Color.black, "tree", 11);
 
     public static final TETile CELL = new TETile('█', Color.white, Color.black, "cell", 12);
+
+    public static final TETile wall = new TETile('█', Color.darkGray, Color.gray, "cell", 13);
+    public static final TETile floor = new TETile('█', Color.cyan, Color.cyan, "cell", 14);
+
 }
 
 
