@@ -1,7 +1,6 @@
 package core;
 
 import java.awt.*;
-import java.util.Random;
 
 public class Room {
     private Point p1;
