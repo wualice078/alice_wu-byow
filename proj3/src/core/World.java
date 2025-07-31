@@ -78,7 +78,7 @@ public class World {
     }
 
     private boolean overLap(Room room, Set<Room> rooms) {
-        System.out.println("check: ");
+        System.out.print("check: ");
         for(Room r : rooms) {
             if(overLap(room, r)) {
                 System.out.println("overlap");
