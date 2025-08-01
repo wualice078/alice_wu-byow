@@ -16,7 +16,6 @@ public class World {
     private boolean yDirection = false;
 
 
-
     public World(int w, int h, long seed) {
 
         world = new TETile[w][h];
