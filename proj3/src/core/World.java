@@ -119,18 +119,33 @@ public class World {
     }
 
     private Hallway gennerateHallway() {
-        int x1 = random.nextInt(width);
-        int y1 = random.nextInt(height);
+        int x1 = -1;
+        int y2 = -1;
         int x2 = width;
-        int y2 = 0;
+        int y1 = height;
+        while (x1 == 0 || x1 == width ) {
+            x1 = random.nextInt(2 * width);
+        }
+        while (y2 == 0 || y2 == height) {
+            y2 = random.nextInt( 2 * height);
+        }
+        if (x1 > width) {
+            x1 = 2 * width - x1;
+            y1 = 0;
+        }
+        if (y2 > height) {
+            y2 = 2 * height - y2;
+            x2 = 0;
+        }
+
 
         Point p1 = new Point(x1, y1);
         Point p2 = new Point(x2, y2);
         Point turn = new Point(x1, y2);
         boolean buildAHallway = false;
 
-        int y = y1;
-        while (y > y2) {
+        int y = Math.max(y1, y2);
+        while (y > Math.min(y1, y2)) {
             int reachWall = 0;
             if (reachAWall(x1, y)){
                 reachWall++;
@@ -147,8 +162,8 @@ public class World {
             y--;
         }
 
-        int x = x1;
-        while (x < x2) {
+        int x = Math.max(x1, x2);
+        while (x > Math.min(x1, x2)) {
             int reachWall = 0;
             if (reachAWall(x, y2)){
                 reachWall++;
@@ -162,7 +177,7 @@ public class World {
                     return hallway;
                 }
             }
-            x++;
+            x--;
         }
 
         return null;
