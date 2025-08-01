@@ -113,14 +113,25 @@ public class World {
         int x2 = x1 + random.nextInt(5) + 5;
         int y2 = y1 + random.nextInt(5) + 5;
         Point p2 = new Point(x2, y2);
-        Room room = new Room(p1, p2);
-
-        return room;
+        return new Room(p1, p2);
     }
 
-    private Hallway gennerateHallway() {
-        int x1 = -1;
-        int y2 = -1;
+    private Hallway generateHallway() {
+        Hallway newHallway;
+        do {
+            Hallway temp = generateRandomPoints();
+            newHallway = validHallway(temp.getP1(), temp.getP2());
+        } while (newHallway == null); 
+        return newHallway;
+    }
+
+    private boolean reachAWall(int x, int y) {
+        return world[x][y].equals(Tileset.wall);
+    }
+
+    private Hallway generateRandomPoints() {
+        int x1 = 0;
+        int y2 = 0;
         int x2 = width;
         int y1 = height;
         while (x1 == 0 || x1 == width ) {
@@ -138,55 +149,43 @@ public class World {
             x2 = 0;
         }
 
-
         Point p1 = new Point(x1, y1);
         Point p2 = new Point(x2, y2);
-        Point turn = new Point(x1, y2);
-        boolean buildAHallway = false;
 
-        int y = Math.max(y1, y2);
-        while (y > Math.min(y1, y2)) {
-            int reachWall = 0;
-            if (reachAWall(x1, y)){
+        return new Hallway(p1, p2);
+    }
+    private Hallway validHallway(Point p1, Point p2) {
+        int y = Math.max(p1.y, p2.y);
+        int reachWall = 0;
+        while (y > Math.min(p1.y, p2.y)) {
+            if (reachAWall(p1.x, y)){
                 reachWall++;
                 if (reachWall == 2) {
-                    p1.setLocation(x1, y);
+                    p1.setLocation(p1.x, y);
                 }
                 if (reachWall == 3) {
-                    p2.setLocation(x1, y);
-                    Hallway hallway = new Hallway(p1, p2);
-                    buildAHallway = true;
-                    return hallway;
+                    p2.setLocation(p1.x, y);
+                    return new Hallway(p1, p2);
                 }
             }
             y--;
         }
 
-        int x = Math.max(x1, x2);
-        while (x > Math.min(x1, x2)) {
-            int reachWall = 0;
-            if (reachAWall(x, y2)){
+        int x = Math.max(p1.x, p2.x);
+        while (x > Math.min(p1.x, p2.x)) {
+            if (reachAWall(x, p2.y)){
                 reachWall++;
                 if (reachWall == 2) {
-                    p1.setLocation(x, y2);
+                    p1.setLocation(x, p2.y);
                 }
                 if (reachWall == 3) {
-                    p2.setLocation(x, y2);
-                    Hallway hallway = new Hallway(p1, p2);
-                    buildAHallway = true;
-                    return hallway;
+                    p2.setLocation(x, p2.y);
+                    return new Hallway(p1, p2);
                 }
             }
             x--;
         }
-
         return null;
-    }
-
-    private boolean reachAWall(int x, int y) {
-        TETile wall = new TETile('#', new Color(216, 128, 128), Color.darkGray,
-                "wall", 1);
-        return world[x][y].equals(wall);
     }
 
     private boolean  overlap(Hallway h1, Hallway h2) {
