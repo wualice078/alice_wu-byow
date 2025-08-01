@@ -37,18 +37,90 @@ public class World {
 
     private void generateWorld() {
         Set<Room> rooms = generateRooms();
-        //generateHallways(rooms);
-
+        Set<Hallway> hallways = generateHallways();
     }
 
-    private void generateHallways(Set<Room> rooms) {
 
+    private Set<Hallway> generateHallways() {
+        Set<Hallway> hallways = new HashSet<>();
+        int numHallways = random.nextInt(15, 21);
+        System.out.println("numHallways: " + numHallways);
+
+        while (hallways.size() < numHallways) {
+            Hallway hallway = generateHallway();
+            System.out.println("hallway: " + hallway.getP1().x + " " + hallway.getP1().y + " " + hallway.getP2().x + " " + hallway.getP2().y);
+            drawHallway(hallway);
+           /* if(!overlap(hallway, hallways)) {
+                hallways.add(hallway);
+                drawHallway(hallway);
+                System.out.println("~added " + hallways.size() + " hallways~");
+            }*/
+        }
+
+        return hallways;
+    }
+
+    private void drawHallways(Set<Hallway> hallways) {
+        for (Hallway hallway : hallways) {
+            drawHallway(hallway);
+        }
+    }
+
+    private void drawHallway(Hallway hallway) {
+        System.out.println("drawing...");
+        Point p1 = hallway.getP1();
+        Point p2 = hallway.getP2();
+        if (p1.x == p2.x) {
+            drawXEqualsHallway(hallway);
+        } else if (p1.y == p2.y) {
+            drawYEqualsHallway(hallway);
+        }else {
+            drawTuringHallway(hallway);
+        }
+    }
+
+    private void drawXEqualsHallway(Hallway hallway) {
+        Point p1 = hallway.getP1();
+        Point p2 = hallway.getP2();
+        int y = Math.max(p1.y, p2.y);
+        int min = Math.min(p1.y, p2.y);
+        while (y > min) {
+            world[p1.x - 1][y] = Tileset.wall;
+            world[p1.x][y] = Tileset.floor;
+            world[p1.x + 1][y] = Tileset.floor;
+            y--;
+        }
+    }
+
+    private void drawYEqualsHallway(Hallway hallway) {
+        Point p1 = hallway.getP1();
+        Point p2 = hallway.getP2();
+        int x = Math.max(p1.x, p2.x);
+        int min = Math.min(p1.x, p2.x);
+        while (x > min) {
+            world[p1.y - 1][x] = Tileset.wall;
+            world[p1.y][x] = Tileset.floor;
+            world[p1.y + 1][x] = Tileset.floor;
+            x--;
+        }
+    }
+
+    private void drawTuringHallway(Hallway hallway) {
+        Point p1 = hallway.getP1();
+        Point p2 = hallway.getP2();
+        Point p3 = new Point(hallway.getTurnPoint().x, hallway.getTurnPoint().y + 1);
+        drawXEqualsHallway(new Hallway(p1, p3));
+        Point p4 = new Point(hallway.getTurnPoint().x - 1, hallway.getTurnPoint().y);
+        drawYEqualsHallway(new Hallway(p2, p4));
+        world[hallway.getTurnPoint().x][hallway.getTurnPoint().y] = Tileset.floor;
+        world[hallway.getTurnPoint().x - 1][hallway.getTurnPoint().y] = Tileset.wall;
+        world[hallway.getTurnPoint().x][hallway.getTurnPoint().y - 1] = Tileset.wall;
+        world[hallway.getTurnPoint().x - 1][hallway.getTurnPoint().y - 1] = Tileset.wall;
     }
 
     private Set<Room> generateRooms() {
         Set<Room> rooms = new HashSet<>();
-        int numRooms = random.nextInt(5);
-        numRooms += 10;
+        int numRooms = random.nextInt(10, 16);
 
         System.out.println("numRooms: " + numRooms);
 
@@ -121,7 +193,7 @@ public class World {
         do {
             Hallway temp = generateRandomPoints();
             newHallway = validHallway(temp.getP1(), temp.getP2());
-        } while (newHallway == null); 
+        } while (newHallway == null);
         return newHallway;
     }
 
@@ -130,23 +202,15 @@ public class World {
     }
 
     private Hallway generateRandomPoints() {
-        int x1 = 0;
-        int y2 = 0;
-        int x2 = width;
-        int y1 = height;
-        while (x1 == 0 || x1 == width ) {
-            x1 = random.nextInt(2 * width);
+        int x1 = random.nextInt(width - 3) ;
+        int y2 = random.nextInt( height - 3) ;
+        int x2 = random.nextInt(0, 2);
+        int y1 = random.nextInt(0, 2);
+        if (y1 == 1) {
+            y1 = height - 1;
         }
-        while (y2 == 0 || y2 == height) {
-            y2 = random.nextInt( 2 * height);
-        }
-        if (x1 > width) {
-            x1 = 2 * width - x1;
-            y1 = 0;
-        }
-        if (y2 > height) {
-            y2 = 2 * height - y2;
-            x2 = 0;
+        if (x2 == 1) {
+            x2 = width - 1;
         }
 
         Point p1 = new Point(x1, y1);
@@ -197,9 +261,9 @@ public class World {
         int y21 = h2.getP1().y;
         int x22 = h2.getP2().x;
         int y22 = h2.getP2().y;
-        if (Math.abs(x11 - x21) < 2 || Math.abs(x11 - x22) < 2 || Math.abs(x12 - x21) < 2 || Math.abs(x12 - x22) < 2) {
+        if (Math.abs(x11 - x21) <= 2 || Math.abs(x11 - x22) <= 2 || Math.abs(x12 - x21) <= 2 || Math.abs(x12 - x22) <= 2) {
             return true;
-        } else if (Math.abs(y11 - y21) < 2 || Math.abs(y11 - y22) < 2 || Math.abs(y12 - y21) < 2 || Math.abs(y12 - y22) < 2 ) {
+        } else if (Math.abs(y11 - y21) <= 2 || Math.abs(y11 - y22) <= 2 || Math.abs(y12 - y21) <= 2 || Math.abs(y12 - y22) <= 2 ) {
             return true;
         } else {
             return false;

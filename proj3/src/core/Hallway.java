@@ -43,4 +43,9 @@ public class Hallway {
     public Point getP2() {
         return this.p2;
     }
+
+    public void setTurnPoint(int x, int y) {
+        turnPoint.x = x;
+        turnPoint.y = y;
+    }
 }

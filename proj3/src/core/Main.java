@@ -9,7 +9,7 @@ public class Main {
 
     private static final long SEED = 1000;
     private static final int WIDTH = 60;
-    private static final int HEIGHT = 60;
+    private static final int HEIGHT = 50;
 
     public static void main(String[] args) {
 
