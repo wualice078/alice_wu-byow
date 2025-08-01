@@ -27,5 +27,11 @@ public class Room {
         return p2.y;
     }
 
+    public Point getCenter() {
+        int centerX = (x1() + x2()) / 2;
+        int centerY = (y1() + y2()) / 2;
+        return new Point(centerX, centerY);
+    }
+
 
 }
