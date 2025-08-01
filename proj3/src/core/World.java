@@ -16,6 +16,7 @@ public class World {
     private int height;
 
 
+
     public World(int w, int h, long seed) {
 
         world = new TETile[w][h];
@@ -115,6 +116,92 @@ public class World {
         Room room = new Room(p1, p2);
 
         return room;
+    }
+
+    private Hallway gennerateHallway() {
+        int x1 = random.nextInt(width);
+        int y1 = random.nextInt(height);
+        int x2 = width;
+        int y2 = 0;
+
+        Point p1 = new Point(x1, y1);
+        Point p2 = new Point(x2, y2);
+        Point turn = new Point(x1, y2);
+        boolean buildAHallway = false;
+
+        int y = y1;
+        while (y > y2) {
+            int reachWall = 0;
+            if (reachAWall(x1, y)){
+                reachWall++;
+                if (reachWall == 2) {
+                    p1.setLocation(x1, y);
+                }
+                if (reachWall == 3) {
+                    p2.setLocation(x1, y);
+                    Hallway hallway = new Hallway(p1, p2);
+                    buildAHallway = true;
+                    return hallway;
+                }
+            }
+            y--;
+        }
+
+        int x = x1;
+        while (x < x2) {
+            int reachWall = 0;
+            if (reachAWall(x, y2)){
+                reachWall++;
+                if (reachWall == 2) {
+                    p1.setLocation(x, y2);
+                }
+                if (reachWall == 3) {
+                    p2.setLocation(x, y2);
+                    Hallway hallway = new Hallway(p1, p2);
+                    buildAHallway = true;
+                    return hallway;
+                }
+            }
+            x++;
+        }
+
+        return null;
+    }
+
+    private boolean reachAWall(int x, int y) {
+        TETile wall = new TETile('#', new Color(216, 128, 128), Color.darkGray,
+                "wall", 1);
+        return world[x][y].equals(wall);
+    }
+
+    private boolean  overlap(Hallway h1, Hallway h2) {
+        int x11 = h1.getP1().x;
+        int y11 = h1.getP1().y;
+        int x12 = h1.getP2().x;
+        int y12 = h1.getP2().y;
+        int x21 = h2.getP1().x;
+        int y21 = h2.getP1().y;
+        int x22 = h2.getP2().x;
+        int y22 = h2.getP2().y;
+        if (Math.abs(x11 - x21) < 2 || Math.abs(x11 - x22) < 2 || Math.abs(x12 - x21) < 2 || Math.abs(x12 - x22) < 2) {
+            return true;
+        } else if (Math.abs(y11 - y21) < 2 || Math.abs(y11 - y22) < 2 || Math.abs(y12 - y21) < 2 || Math.abs(y12 - y22) < 2 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean overlap(Hallway h1, Set<Hallway> hallways) {
+        System.out.print("check: ");
+        for(Hallway h : hallways) {
+            if(overlap(h1, h)) {
+                System.out.println("overlap");
+                return true;
+            }
+        }
+        System.out.println("no overlap");
+        return false;
     }
 
     public TETile[][] getWorld() {

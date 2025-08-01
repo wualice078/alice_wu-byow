@@ -26,6 +26,8 @@ public class Hallway {
         }
     }
 
+
+
     public int getDirection() {
         return this.direction;
     }

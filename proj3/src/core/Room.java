@@ -26,4 +26,6 @@ public class Room {
     public int y2() {
         return p2.y;
     }
+
+
 }
