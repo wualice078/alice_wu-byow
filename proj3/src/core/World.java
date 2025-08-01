@@ -104,7 +104,7 @@ public class World {
 
     private Set<Room> generateRooms() {
         Set<Room> rooms = new HashSet<>();
-        int numRooms = random.nextInt(10, 16);
+        int numRooms = random.nextInt(14, 16);
 
         System.out.println("numRooms: " + numRooms);
 
@@ -163,11 +163,11 @@ public class World {
     }
 
     private Room generateRoom() {
-        int x1 = random.nextInt(width-10);
-        int y1 = random.nextInt(height-10);
+        int x1 = random.nextInt(width - 12);
+        int y1 = random.nextInt(height - 12);
         Point p1 = new Point(x1, y1);
-        int x2 = x1 + random.nextInt(5) + 5;
-        int y2 = y1 + random.nextInt(5) + 5;
+        int x2 = x1 + random.nextInt(7, 13);
+        int y2 = y1 + random.nextInt(7, 13);
         Point p2 = new Point(x2, y2);
         return new Room(p1, p2);
     }
