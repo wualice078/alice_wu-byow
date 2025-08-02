@@ -12,6 +12,7 @@ public class World {
     private static Random random;
     private final int width;
     private final int height;
+    private Point avatar;
 
 
     public World(int w, int h, long seed) {
@@ -35,6 +36,49 @@ public class World {
     private void generateWorld() {
         Set<Room> rooms = generateRooms();
         generateHallways(rooms);
+        generateAvatar();
+    }
+
+    private void generateAvatar() {
+        int x = 0;
+        int y = 0;
+        while(world[x][y] != Tileset.floor) {
+            x = random.nextInt(3,width - 14);
+            y = random.nextInt(3, height - 14);
+        }
+        world[x][y] = Tileset.AVATAR;
+        this.avatar = new Point(x, y);
+    }
+
+    public void moveAvatar(char c) {
+        if (c == 'w' || c == 'W') {
+            if (world[avatar.x][avatar.y + 1] != Tileset.wall) {
+                avatar.y++;
+                world[avatar.x][avatar.y] = Tileset.AVATAR;
+                world[avatar.x][avatar.y - 1] = Tileset.floor;
+            }
+        }
+        if (c == 'a' || c == 'A') {
+            if (world[avatar.x - 1][avatar.y] != Tileset.wall) {
+                avatar.x--;
+                world[avatar.x][avatar.y] = Tileset.AVATAR;
+                world[avatar.x + 1][avatar.y] = Tileset.floor;
+            }
+        }
+        if (c == 's' || c == 'S') {
+            if (world[avatar.x][avatar.y - 1] != Tileset.wall) {
+                avatar.y--;
+                world[avatar.x][avatar.y] = Tileset.AVATAR;
+                world[avatar.x][avatar.y + 1] = Tileset.floor;
+            }
+        }
+        if (c == 'd' || c == 'D') {
+            if (world[avatar.x + 1][avatar.y] != Tileset.wall) {
+                avatar.x++;
+                world[avatar.x][avatar.y] = Tileset.AVATAR;
+                world[avatar.x - 1][avatar.y] = Tileset.floor;
+            }
+        }
     }
 
     private void generateHallways(Set<Room> rooms) {
@@ -172,7 +216,6 @@ public class World {
         Point p2 = new Point(x2, y2);
         return new Room(p1, p2);
     }
-
 
     public TETile[][] getWorld() {
         return this.world;

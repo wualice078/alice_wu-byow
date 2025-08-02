@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Main {
 
-    private static final long SEED = 23069458;
+    private static final long SEED = 2398;
     private static final int WIDTH = 80;
     private static final int HEIGHT = 50;
 
