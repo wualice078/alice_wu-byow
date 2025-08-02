@@ -35,7 +35,7 @@ public class Tileset {
 
     public static final TETile CELL = new TETile('⟡', Color.white, Color.black, "cell", 12);
 
-    public static final TETile wall = new TETile('▒', new Color(1,150,29), new Color(148,148,148), "cell", 13);
+    public static final TETile wall = new TETile('▒', new Color(1,150,29), new Color(148,148,148), "wall", 13);
     public static final TETile floor = new TETile('▒', new Color(255,232,153), new Color(255,248,167), "floor", 14);
 
 }

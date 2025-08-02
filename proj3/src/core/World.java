@@ -32,6 +32,10 @@ public class World {
 
     }
 
+    public TETile[][] getWorldArray() {
+        return world;
+    }
+
     private void generateWorld() {
         Set<Room> rooms = generateRooms();
         generateHallways(rooms);
