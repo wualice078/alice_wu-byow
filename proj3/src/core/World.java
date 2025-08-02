@@ -12,8 +12,6 @@ public class World {
     private static Random random;
     private final int width;
     private final int height;
-    private boolean xDirection = false;
-    private boolean yDirection = false;
 
 
     public World(int w, int h, long seed) {
@@ -47,18 +45,22 @@ public class World {
             Point p2 = roomList.get(i + 1).getCenter();
             drawHallway(p1, p2);
         }
+        roomList.sort(Comparator.comparingInt(r -> r.getCenter().y));
+        for(int i = 0; i < roomList.size() - 1; i++) {
+            Point p1 = roomList.get(i).getCenter();
+            Point p2 = roomList.get(i + 1).getCenter();
+            drawHallway(p1, p2);
+        }
     }
 
     private void drawStraightHallway(Point p1, Point p2) {
         if (p1. x == p2.x) {
-            yDirection = true;
             int yStart = Math.max(p1.y, p2.y);
             int yEnd = Math.min(p1.y, p2.y);
             for (int y = yStart; y >= yEnd; y--) {
                 setHallwayTile(p1.x, y);
             }
         } else if (p1.y == p2.y) {
-            xDirection = true;
             int xStart = Math.max(p1.x, p2.x);
             int xEnd = Math.min(p1.x, p2.x);
             for (int x = xStart; x >= xEnd; x--) {
@@ -103,7 +105,7 @@ public class World {
 
     private Set<Room> generateRooms() {
         Set<Room> rooms = new HashSet<>();
-        int numRooms = random.nextInt(14, 16);
+        int numRooms = random.nextInt(14, 18);
 
         System.out.println("numRooms: " + numRooms);
 
@@ -162,11 +164,11 @@ public class World {
     }
 
     private Room generateRoom() {
-        int x1 = random.nextInt(width - 12);
-        int y1 = random.nextInt(height - 12);
+        int x1 = random.nextInt(2, width - 13);
+        int y1 = random.nextInt(2, height - 13);
         Point p1 = new Point(x1, y1);
-        int x2 = x1 + random.nextInt(7, 13);
-        int y2 = y1 + random.nextInt(7, 13);
+        int x2 = x1 + random.nextInt(7, 14);
+        int y2 = y1 + random.nextInt(7, 14);
         Point p2 = new Point(x2, y2);
         return new Room(p1, p2);
     }
