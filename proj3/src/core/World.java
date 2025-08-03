@@ -46,6 +46,19 @@ public class World {
         return world;
     }
 
+    public int avatarX() {
+        return avatar.x;
+    }
+
+    public int avatarY() {
+        return avatar.y;
+    }
+
+    public void setAvatar(int x, int y) {
+        world[avatar.x][avatar.y] = Tileset.floor;
+        avatar = new Point(x, y);
+        world[x][y] = Tileset.avatar;
+    }
     private void generateWorld() {
         Set<Room> rooms = generateRooms();
         generateHallways(rooms);

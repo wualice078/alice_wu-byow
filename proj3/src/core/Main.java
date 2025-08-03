@@ -5,6 +5,9 @@ import tileengine.TERenderer;
 import tileengine.TETile;
 
 import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 
 public class Main {
@@ -39,7 +42,8 @@ public class Main {
                 char c = StdDraw.nextKeyTyped();
                 if (c == 'n' || c == 'N') {
                     receiveSeed();
-                    startGame();
+                    World map = new World(WIDTH, HEIGHT, SEED);
+                    startGame(map);
                 } else if (c == 'l' || c == 'L') {
                     loadGame();
                 } else if (c == 'q' || c == 'Q') {
@@ -86,13 +90,12 @@ public class Main {
         }
     }
 
-    public static void startGame() {
+    public static void startGame(World map) {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT + HUD_Height);
-
-        World map = new World(WIDTH, HEIGHT, SEED);
         HUD hud = new HUD();
         ter.renderFrame(map.world());
+
         int prevMouseX = -1;
         int prevMouseY = -1;
 
@@ -103,16 +106,16 @@ public class Main {
                     while (!StdDraw.hasNextKeyTyped()) {
                         StdDraw.pause(10);
                     }
-                    c = StdDraw.nextKeyTyped();
-                    if (c == 'q' || c == 'Q') {
-                        saveGame();
+                    char next = StdDraw.nextKeyTyped();
+                    if (next == 'q' || next == 'Q') {
+                        SaveLoad.save(SEED, map.avatarX(), map.avatarY());
                         System.exit(0);
                     }
                 }
                 if (c == 'w' || c == 'W' || c == 'a' || c == 'A' ||
                         c == 's' || c == 'S' || c == 'd' || c == 'D') {
                     map.moveAvatar(c);
-                    ter.renderFrame(map.world());
+                    renderGame(map, hud, ter);
                 }
             }
 
@@ -129,10 +132,25 @@ public class Main {
         }
     }
 
-    public static void saveGame() {
-
+    public static void renderGame(World map, HUD hud, TERenderer ter) {
+        ter.renderFrame(map.world());
+        hud.displayHUD(map);
+        StdDraw.show();
     }
+
     public static void loadGame() {
+        SaveWorld saved = SaveLoad.load();
+        if (saved == null) {
+            displayMenu();
+            return;
+        }
+        SEED = saved.seed;
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT + HUD_Height);
+
+        World map = new World(WIDTH, HEIGHT, SEED);
+        map.setAvatar(saved.avatarX, saved.avatarY);
+        startGame(map);
 
     }
 }
