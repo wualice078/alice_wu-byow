@@ -12,17 +12,18 @@ public class Main {
     private static long SEED = 2306;
     private static final int WIDTH = 80;
     private static final int HEIGHT = 50;
+    private static final int HUD_Height = 1;
 
     public static void main(String[] args) {
         displayMenu();
     }
 
     public static void displayMenu() {
-        StdDraw.setCanvasSize(WIDTH * 16, HEIGHT * 16);
+        StdDraw.setCanvasSize(WIDTH * 16, (HEIGHT + HUD_Height) * 16);
         Font font = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(font);
         StdDraw.setXscale(0, WIDTH);
-        StdDraw.setYscale(0, HEIGHT);
+        StdDraw.setYscale(0, HEIGHT + HUD_Height);
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.enableDoubleBuffering();
 
@@ -87,12 +88,13 @@ public class Main {
 
     public static void startGame() {
         TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
+        ter.initialize(WIDTH, HEIGHT + HUD_Height);
 
         World map = new World(WIDTH, HEIGHT, SEED);
-        ter.renderFrame(map.getWorld());
-        int x = (int) StdDraw.mouseX();
-        int y = (int) StdDraw.mouseY();
+        HUD hud = new HUD();
+        ter.renderFrame(map.world());
+        int prevMouseX = -1;
+        int prevMouseY = -1;
 
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
@@ -110,19 +112,20 @@ public class Main {
                 if (c == 'w' || c == 'W' || c == 'a' || c == 'A' ||
                         c == 's' || c == 'S' || c == 'd' || c == 'D') {
                     map.moveAvatar(c);
-                    ter.renderFrame(map.getWorld());
-                    map.displayHUD(x, y);
+                    ter.renderFrame(map.world());
                 }
             }
 
-            x = (int) StdDraw.mouseX();
-            y = (int) StdDraw.mouseY();
+            int x = (int) StdDraw.mouseX();
+            int y = (int) StdDraw.mouseY();
 
-            if (x != map.mouse.x || y != map.mouse.y) {
-                ter.renderFrame(map.getWorld());
-                map.displayHUD(x, y);
+            if (x != prevMouseX || y != prevMouseY) {
+                prevMouseX = x;
+                prevMouseY = y;
+                hud.displayHUD(map);
+                StdDraw.show();
             }
-            
+            StdDraw.pause(20);
         }
     }
 
