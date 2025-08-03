@@ -14,7 +14,6 @@ public class World {
     private final int width;
     private final int height;
     private Point avatar;
-    public Point mouse;
 
 
     public World(int w, int h, long seed) {
@@ -35,12 +34,35 @@ public class World {
 
     }
 
+    public int height() {
+        return height;
+    }
+
+    public int width() {
+        return width;
+    }
+
+    public TETile[][] world() {
+        return world;
+    }
+
+    public int avatarX() {
+        return avatar.x;
+    }
+
+    public int avatarY() {
+        return avatar.y;
+    }
+
+    public void setAvatar(int x, int y) {
+        world[avatar.x][avatar.y] = Tileset.floor;
+        avatar = new Point(x, y);
+        world[x][y] = Tileset.avatar;
+    }
     private void generateWorld() {
         Set<Room> rooms = generateRooms();
         generateHallways(rooms);
         generateAvatar();
-        this.mouse = new Point((int) StdDraw.mouseX(), (int) StdDraw.mouseY());
-        displayHUD(mouse.x, mouse.y);
     }
 
     private void generateAvatar() {
@@ -219,21 +241,6 @@ public class World {
         int y2 = y1 + random.nextInt(7, 14);
         Point p2 = new Point(x2, y2);
         return new Room(p1, p2);
-    }
-
-    public void displayHUD(int x, int y) {
-        this.mouse.x = x;
-        this.mouse.y = y;
-        if (x > 0 && x < width && y > 0 && y < height) {
-            TETile tile = world[x][y];
-            StdDraw.setPenColor(Color.DARK_GRAY);
-            StdDraw.textLeft(1, height - 1, "Tile: " + tile.description());
-            StdDraw.show();
-        }
-    }
-
-    public TETile[][] getWorld() {
-        return this.world;
     }
 
 }
