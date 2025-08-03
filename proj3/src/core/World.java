@@ -63,6 +63,18 @@ public class World {
         Set<Room> rooms = generateRooms();
         generateHallways(rooms);
         generateAvatar();
+        for (int x = 1; x < width - 2; x++) {
+            for (int y = 1; y < height -1; y++) {
+                if(!validHallway(x, y)) {
+                    world[x + 1][y] = Tileset.floor;
+                }
+                if(uselessWall(x, y)) {
+                    world[x][y] = Tileset.floor;
+                }
+            }
+        }
+        addWalls();
+
     }
 
     private void generateAvatar() {
@@ -128,13 +140,19 @@ public class World {
             int yStart = Math.max(p1.y, p2.y);
             int yEnd = Math.min(p1.y, p2.y);
             for (int y = yStart; y >= yEnd; y--) {
-                setHallwayTile(p1.x, y);
+                if (world[p1.x][y] == Tileset.nothing || world[p1.x][y] == Tileset.wall) {
+                    world[p1.x][y] = Tileset.floor;
+                }
+
             }
         } else if (p1.y == p2.y) {
             int xStart = Math.max(p1.x, p2.x);
             int xEnd = Math.min(p1.x, p2.x);
             for (int x = xStart; x >= xEnd; x--) {
-                setHallwayTile(x, p1.y);
+                if (world[x][p1.y] == Tileset.nothing || world[x][p1.y] == Tileset.wall) {
+                    world[x][p1.y] = Tileset.floor;
+                }
+
             }
         }
     }
@@ -152,6 +170,57 @@ public class World {
 
     private boolean valid(int x, int y) {
         return (x > 0 && x < width - 1) && (y > 0 && y < height - 1);
+    }
+
+    private void addWalls() {
+        for(int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if(world[x][y] == Tileset.nothing && isCloseToFloor(x, y)) {
+                    world[x][y] = Tileset.wall;
+                }
+            }
+        }
+    }
+
+    private boolean isCloseToFloor(int x, int y) {
+        for (int dx = -1; dx <= 1; dx++){
+            for (int dy = -1; dy <= 1; dy++) {
+                if(world[x + dx][y + dy] == Tileset.floor) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean validHallway(int x, int y) {
+        int wallCount = 0;
+        for (int dx = -1; dx <= 1; dx++){
+            for (int dy = -1; dy <= 1; dy++) {
+                if(world[x][y] == Tileset.floor && world[x + dx][y + dy] == Tileset.wall) {
+                    wallCount ++;
+                }
+            }
+        }
+        if (wallCount <= 2) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean uselessWall(int x, int y) {
+        int floorCount = 0;
+        for (int dx = -1; dx <= 1; dx++){
+            for (int dy = -1; dy <= 1; dy++) {
+                if(world[x][y] == Tileset.wall && world[x + dx][y + dy] == Tileset.floor) {
+                    floorCount ++;
+                }
+            }
+        }
+        if (floorCount <= 2) {
+            return false;
+        }
+        return true;
     }
 
     private void setHallwayTile(int x, int y) {
