@@ -1,5 +1,6 @@
 package core;
 
+import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TETile;
 import tileengine.Tileset;
 
@@ -13,6 +14,7 @@ public class World {
     private final int width;
     private final int height;
     private Point avatar;
+    public Point mouse;
 
 
     public World(int w, int h, long seed) {
@@ -24,7 +26,7 @@ public class World {
 
         for (int x = 0; x < w; x += 1) {
             for (int y = 0; y < h; y += 1) {
-                world[x][y] = Tileset.NOTHING;
+                world[x][y] = Tileset.nothing;
             }
         }
 
@@ -37,6 +39,8 @@ public class World {
         Set<Room> rooms = generateRooms();
         generateHallways(rooms);
         generateAvatar();
+        this.mouse = new Point((int) StdDraw.mouseX(), (int) StdDraw.mouseY());
+        displayHUD(mouse.x, mouse.y);
     }
 
     private void generateAvatar() {
@@ -46,7 +50,7 @@ public class World {
             x = random.nextInt(3,width - 14);
             y = random.nextInt(3, height - 14);
         }
-        world[x][y] = Tileset.AVATAR;
+        world[x][y] = Tileset.avatar;
         this.avatar = new Point(x, y);
     }
 
@@ -54,28 +58,28 @@ public class World {
         if (c == 'w' || c == 'W') {
             if (world[avatar.x][avatar.y + 1] != Tileset.wall) {
                 avatar.y++;
-                world[avatar.x][avatar.y] = Tileset.AVATAR;
+                world[avatar.x][avatar.y] = Tileset.avatar;
                 world[avatar.x][avatar.y - 1] = Tileset.floor;
             }
         }
         if (c == 'a' || c == 'A') {
             if (world[avatar.x - 1][avatar.y] != Tileset.wall) {
                 avatar.x--;
-                world[avatar.x][avatar.y] = Tileset.AVATAR;
+                world[avatar.x][avatar.y] = Tileset.avatar;
                 world[avatar.x + 1][avatar.y] = Tileset.floor;
             }
         }
         if (c == 's' || c == 'S') {
             if (world[avatar.x][avatar.y - 1] != Tileset.wall) {
                 avatar.y--;
-                world[avatar.x][avatar.y] = Tileset.AVATAR;
+                world[avatar.x][avatar.y] = Tileset.avatar;
                 world[avatar.x][avatar.y + 1] = Tileset.floor;
             }
         }
         if (c == 'd' || c == 'D') {
             if (world[avatar.x + 1][avatar.y] != Tileset.wall) {
                 avatar.x++;
-                world[avatar.x][avatar.y] = Tileset.AVATAR;
+                world[avatar.x][avatar.y] = Tileset.avatar;
                 world[avatar.x - 1][avatar.y] = Tileset.floor;
             }
         }
@@ -133,16 +137,16 @@ public class World {
             return;
         }
         world[x][y] = Tileset.floor;
-        if (valid (x + 1, y) && world[x + 1][y] == Tileset.NOTHING) {
+        if (valid(x + 1, y) && world[x + 1][y] == Tileset.nothing) {
             world[ x + 1][y] = Tileset.wall;
         }
-        if (valid (x - 1, y) && world[x - 1][y] == Tileset.NOTHING) {
+        if (valid(x - 1, y) && world[x - 1][y] == Tileset.nothing) {
             world[x - 1][y] = Tileset.wall;
         }
-        if (valid (x, y + 1) && world[x][y + 1] == Tileset.NOTHING) {
+        if (valid(x, y + 1) && world[x][y + 1] == Tileset.nothing) {
             world[x][y + 1] = Tileset.wall;
         }
-        if (valid (x, y - 1) && world[x][y - 1] == Tileset.NOTHING) {
+        if (valid(x, y - 1) && world[x][y - 1] == Tileset.nothing) {
             world[x][y - 1] = Tileset.wall;
         }
     }
@@ -215,6 +219,17 @@ public class World {
         int y2 = y1 + random.nextInt(7, 14);
         Point p2 = new Point(x2, y2);
         return new Room(p1, p2);
+    }
+
+    public void displayHUD(int x, int y) {
+        this.mouse.x = x;
+        this.mouse.y = y;
+        if (x > 0 && x < width && y > 0 && y < height) {
+            TETile tile = world[x][y];
+            StdDraw.setPenColor(Color.DARK_GRAY);
+            StdDraw.textLeft(1, height - 1, "Tile: " + tile.description());
+            StdDraw.show();
+        }
     }
 
     public TETile[][] getWorld() {

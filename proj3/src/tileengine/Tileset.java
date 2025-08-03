@@ -21,7 +21,6 @@ public class Tileset {
     public static final TETile WALL = new TETile('#', new Color(216, 128, 128), Color.darkGray,
             "wall", 1);
     public static final TETile FLOOR = new TETile('·', new Color(128, 192, 128), Color.black, "floor", 2);
-    public static final TETile NOTHING = new TETile(' ', new Color(153,255,243), new Color(153,255,243), "nothing", 3);
     public static final TETile GRASS = new TETile('"', Color.green, Color.black, "grass", 4);
     public static final TETile WATER = new TETile('≈', Color.blue, Color.black, "water", 5);
     public static final TETile FLOWER = new TETile('❀', Color.magenta, Color.pink, "flower", 6);
@@ -35,8 +34,20 @@ public class Tileset {
 
     public static final TETile CELL = new TETile('⟡', Color.white, Color.black, "cell", 12);
 
-    public static final TETile wall = new TETile('▒', new Color(1,150,29), new Color(148,148,148), "cell", 13);
-    public static final TETile floor = new TETile('▒', new Color(255,232,153), new Color(255,248,167), "floor", 14);
+    public static final TETile nothing = new TETile(' ', new Color(153,255,243), new Color(153,255,243), "ocean", 3);
+    public static final TETile wall = new TETile('▒', new Color(1,150,29), new Color(148,148,148), "rocks", 13);
+    public static final TETile floor = new TETile('▒', new Color(255,232,153), new Color(255,248,167), "sand", 14);
+    public static final TETile avatar = new TETile('■', new Color(0,0,0), new Color(255,248,167), "you", 15);
+
+    public static final TETile nothing2 = new TETile(' ', new Color(55,184,227), new Color(55,184,227), "sea", 3);
+    public static final TETile wall2 = new TETile('▒', new Color(81,107,65), new Color(69,55,37), "marsh", 13);
+    public static final TETile floor2 = new TETile('▒', new Color(117,199,19), new Color(6,130,16), "grassland", 14);
+    public static final TETile avatar2 = new TETile('■', new Color(255,249,237), new Color(6,130,16), "you", 15);
+
+    public static final TETile nothing3 = new TETile('≈', new Color(255,84,0), new Color(255,126,0), "lava", 3);
+    public static final TETile wall3 = new TETile('▒', new Color(255,126,0), new Color(31,32,24), "magma", 13);
+    public static final TETile floor3 = new TETile(' ', new Color(252,241,232), new Color(26,26,26), "obsidian", 14);
+    public static final TETile avatar3 = new TETile('■', new Color(255,249,237), new Color(26,26,26), "you", 15);
 
 }
 
