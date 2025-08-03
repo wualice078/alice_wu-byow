@@ -139,7 +139,7 @@ public class Main {
     }
 
     public static void loadGame() {
-        SaveWorld saved = SaveLoad.load();
+        SaveLoad saved = SaveLoad.load();
         if (saved == null) {
             displayMenu();
             return;
