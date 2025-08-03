@@ -82,7 +82,7 @@ public class Main {
     }
 
     public static boolean isParsable(String s) {
-        try {
+        try {84
             Long.parseLong(s);
             return true;
         } catch (NumberFormatException e) {

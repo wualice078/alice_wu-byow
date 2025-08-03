@@ -223,25 +223,6 @@ public class World {
         return true;
     }
 
-    private void setHallwayTile(int x, int y) {
-        if (!valid(x, y)) {
-            return;
-        }
-        world[x][y] = Tileset.floor;
-        if (valid(x + 1, y) && world[x + 1][y] == Tileset.nothing) {
-            world[ x + 1][y] = Tileset.wall;
-        }
-        if (valid(x - 1, y) && world[x - 1][y] == Tileset.nothing) {
-            world[x - 1][y] = Tileset.wall;
-        }
-        if (valid(x, y + 1) && world[x][y + 1] == Tileset.nothing) {
-            world[x][y + 1] = Tileset.wall;
-        }
-        if (valid(x, y - 1) && world[x][y - 1] == Tileset.nothing) {
-            world[x][y - 1] = Tileset.wall;
-        }
-    }
-
     private Set<Room> generateRooms() {
         Set<Room> rooms = new HashSet<>();
         int numRooms = random.nextInt(14, 18);
