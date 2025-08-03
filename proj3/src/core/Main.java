@@ -122,7 +122,7 @@ public class Main {
                 ter.renderFrame(map.getWorld());
                 map.displayHUD(x, y);
             }
-            
+
         }
     }
 
