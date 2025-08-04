@@ -1,18 +1,15 @@
 package core;
 
-import edu.princeton.cs.algs4.In;
-import tileengine.TETile;
-
 import java.io.*;
 import java.util.Scanner;
 
-public class SaveLoad {
+public class SavedWorld {
     private static final String SAVE = "save.txt";
     long seed;
     int avatarX;
     int avatarY;
 
-    public SaveLoad(long seed, int avatarX, int avatarY) {
+    public SavedWorld(long seed, int avatarX, int avatarY) {
         this.seed = seed;
         this.avatarX = avatarX;
         this.avatarY = avatarY;
@@ -26,14 +23,14 @@ public class SaveLoad {
         }
     }
 
-    public static SaveLoad load() {
+    public static SavedWorld load() {
         try(Scanner in = new Scanner(new File(SAVE))){
             String line = in.nextLine();
             String[] parts = line.split(",");
             long seed = Long.parseLong(parts[0]);
             int avatarX = Integer.parseInt(parts[1]);
             int avatarY = Integer.parseInt(parts[2]);
-            return new SaveLoad(seed, avatarX, avatarY);
+            return new SavedWorld(seed, avatarX, avatarY);
         } catch(Exception e) {
             System.err.println("Failed to load game: " + e.getMessage());
             return null;

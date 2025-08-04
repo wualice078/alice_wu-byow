@@ -2,13 +2,8 @@ package core;
 
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TERenderer;
-import tileengine.TETile;
 
 import java.awt.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.Random;
 
 public class Main {
 
@@ -108,7 +103,7 @@ public class Main {
                     }
                     char next = StdDraw.nextKeyTyped();
                     if (next == 'q' || next == 'Q') {
-                        SaveLoad.save(SEED, map.avatarX(), map.avatarY());
+                        SavedWorld.save(SEED, map.avatarX(), map.avatarY());
                         System.exit(0);
                     }
                 }
@@ -140,7 +135,7 @@ public class Main {
     }
 
     public static void loadGame() {
-        SaveLoad saved = SaveLoad.load();
+        SavedWorld saved = SavedWorld.load();
         if (saved == null) {
             displayMenu();
             return;

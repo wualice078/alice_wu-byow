@@ -14,8 +14,6 @@ public class World {
     private final int width;
     private final int height;
     private Point avatar;
-    private Set<Room> allRooms = new HashSet<>();
-
 
 
     public World(int w, int h, long seed) {
@@ -61,9 +59,10 @@ public class World {
         avatar = new Point(x, y);
         world[x][y] = Tileset.avatar;
     }
+
     private void generateWorld() {
-        Set<Room> allRooms = generateRooms();
-        generateHallways(allRooms);
+        Set<Room> rooms = generateRooms();
+        generateHallways(rooms);
         generateAvatar();
     }
 
@@ -126,34 +125,19 @@ public class World {
     }
 
     private void drawStraightHallway(Point p1, Point p2) {
-        if (p1.x == p2.x) {
+        if (p1. x == p2.x) {
             int yStart = Math.max(p1.y, p2.y);
             int yEnd = Math.min(p1.y, p2.y);
-            System.out.println("hellow?");
             for (int y = yStart; y >= yEnd; y--) {
-                if(!isInAnyRoom(p1.x, y) && (world[p1.x - 1][y] == Tileset.floor || world[p1.x + 1][y] == Tileset.floor))
-                    continue;
                 setHallwayTile(p1.x, y);
             }
-
         } else if (p1.y == p2.y) {
             int xStart = Math.max(p1.x, p2.x);
             int xEnd = Math.min(p1.x, p2.x);
             for (int x = xStart; x >= xEnd; x--) {
-                if(!isInAnyRoom(x, p1.y) && (world[x][p1.y - 1] == Tileset.floor || world[x][p1.y + 1] == Tileset.floor))
-                    continue;
                 setHallwayTile(x, p1.y);
             }
         }
-    }
-
-    private boolean isInAnyRoom(int x, int y) {
-        for (Room room : allRooms) {
-            if (x >= room.x1() && x <= room.x2() && y >= room.y1() && y <= room.y2()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void drawHallway(Point p1, Point p2) {
@@ -177,7 +161,7 @@ public class World {
         }
         world[x][y] = Tileset.floor;
         if (valid(x + 1, y) && world[x + 1][y] == Tileset.nothing) {
-            world[ x + 1][y] = Tileset.wall;
+            world[x + 1][y] = Tileset.wall;
         }
         if (valid(x - 1, y) && world[x - 1][y] == Tileset.nothing) {
             world[x - 1][y] = Tileset.wall;
@@ -211,9 +195,9 @@ public class World {
 
     private void drawRoom(Room r) {
         System.out.println("drawing...");
-        for (int x = r.x1(); x <= r.x2(); x++) {
-            for (int y = r.y1(); y <= r.y2(); y++) {
-                if(x == r.x1() || x == r.x2() || y == r.y1() || y == r.y2()) {
+        for (int x = r.x1(); x < r.x2(); x++) {
+            for (int y = r.y1(); y < r.y2(); y++) {
+                if(x == r.x1() || x == r.x2() - 1|| y == r.y1() || y == r.y2() - 1) {
                     this.world[x][y] = Tileset.wall;
                 } else {
                     this.world[x][y] = Tileset.floor;
@@ -235,16 +219,16 @@ public class World {
     }
 
     private boolean overLap(Room r1, Room r2) {
-        if (r1.x2() < r2.x1()) {
+        if(r1.x2() < r2.x1()) {
             return false;
         }
-        if (r1.x1() > r2.x2()) {
+        if(r1.x1() > r2.x2()) {
             return false;
         }
-        if (r1.y2() < r2.y1()) {
+        if(r1.y2() < r2.y1()) {
             return false;
         }
-        if (r1.y1() > r2.y2()) {
+        if(r1.y1() > r2.y2()) {
             return false;
         }
         return true;
