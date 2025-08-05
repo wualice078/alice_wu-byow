@@ -2,20 +2,15 @@ package core;
 
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TERenderer;
-import tileengine.TETile;
 
 import java.awt.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.Random;
 
 public class Main {
 
-    private static long SEED = 2306;
+    private static long SEED = 0;
     private static final int WIDTH = 80;
     private static final int HEIGHT = 50;
-    private static final int HUD_Height = 1;
+    private static final int HUD_Height = 2;
 
     public static void main(String[] args) {
         displayMenu();
@@ -93,11 +88,9 @@ public class Main {
     public static void startGame(World map) {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT + HUD_Height);
-        HUD hud = new HUD();
         ter.renderFrame(map.world());
-
-        int prevMouseX = -1;
-        int prevMouseY = -1;
+        HUD hud = new HUD();
+        Point mouse = hud.displayHUD(map);
 
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
@@ -108,38 +101,54 @@ public class Main {
                     }
                     char next = StdDraw.nextKeyTyped();
                     if (next == 'q' || next == 'Q') {
-                        SaveLoad.save(SEED, map.avatarX(), map.avatarY());
+                        SavedWorld.save(SEED, map.avatar(), map.coins());
                         System.exit(0);
                     }
                 }
                 if (c == 'w' || c == 'W' || c == 'a' || c == 'A' ||
                         c == 's' || c == 'S' || c == 'd' || c == 'D') {
                     map.moveAvatar(c);
-                    renderGame(map, hud, ter);
+                    ter.renderFrame(map.world());
+                    hud.displayHUD(map);
+                    StdDraw.show();
+
+                    if (map.coins().isEmpty()) {
+                        StdDraw.pause(500);
+                        endGame();
+                    }
                 }
             }
 
             int x = (int) StdDraw.mouseX();
             int y = (int) StdDraw.mouseY();
 
-            if (x != prevMouseX || y != prevMouseY) {
-                prevMouseX = x;
-                prevMouseY = y;
-                hud.displayHUD(map);
-                StdDraw.show();
+            if (x != mouse.x || y != mouse.y) {
+                mouse = hud.displayHUD(map);
             }
+
             StdDraw.pause(20);
         }
     }
 
-    public static void renderGame(World map, HUD hud, TERenderer ter) {
-        ter.renderFrame(map.world());
-        hud.displayHUD(map);
+    public static void endGame() {
+        StdDraw.setCanvasSize(WIDTH * 16, (HEIGHT + HUD_Height) * 16);
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT + HUD_Height);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.enableDoubleBuffering();
+
+        StdDraw.clear(Color.BLACK);
+        StdDraw.text(WIDTH / 2, HEIGHT / 2, "You Escaped!");
         StdDraw.show();
+        StdDraw.pause(5000);
+
+        displayMenu();
     }
 
     public static void loadGame() {
-        SaveLoad saved = SaveLoad.load();
+        SavedWorld saved = SavedWorld.load();
         if (saved == null) {
             displayMenu();
             return;
@@ -149,7 +158,9 @@ public class Main {
         ter.initialize(WIDTH, HEIGHT + HUD_Height);
 
         World map = new World(WIDTH, HEIGHT, SEED);
-        map.setAvatar(saved.avatarX, saved.avatarY);
+        map.setAvatar(saved.avatar);
+        System.out.println(saved.coins);
+        map.setCoins(saved.coins);
         startGame(map);
 
     }
