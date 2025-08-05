@@ -6,6 +6,7 @@ import tileengine.Tileset;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class World {
 
@@ -14,6 +15,8 @@ public class World {
     private final int width;
     private final int height;
     private Point avatar;
+    private Point chaser;
+    private PathFinder pathFinder;
     private Set<Point> coins = new HashSet<>();
 
 
@@ -31,6 +34,8 @@ public class World {
         }
 
         generateWorld();
+        generateChaser();
+        pathFinder = new PathFinder(chaser, world, width, height);
     }
 
     public int height() {
@@ -51,6 +56,14 @@ public class World {
 
     public Set<Point> coins() {
         return coins;
+    }
+
+    public PathFinder getPathFinder() {
+        return pathFinder;
+    }
+
+    public Point chaser(){
+        return chaser;
     }
 
     public void setAvatar(Point avatar) {
@@ -74,6 +87,27 @@ public class World {
         generateHallways(rooms);
         generateAvatar();
         generateCoins();
+    }
+
+    private void generateChaser() {
+        int x = 0;
+        int y = 0;
+        while(world[x][y] != Tileset.floor) {
+            x = random.nextInt(3,width - 14);
+            y = random.nextInt(3, height - 14);
+        }
+        world[x][y] = Tileset.chaser;
+        this.chaser = new Point(x, y);
+    }
+
+    public void moveChaser() {
+        List<Point> path = pathFinder.findPath(chaser, avatar);
+        if (path.size() > 1) {
+            Point next = path.get(1);
+            world[chaser.x][chaser.y] = Tileset.floor;
+            chaser = next;
+            world[chaser.x][chaser.y] =Tileset.chaser;
+        }
     }
 
     private void generateAvatar() {

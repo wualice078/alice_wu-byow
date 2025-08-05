@@ -2,8 +2,11 @@ package core;
 
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TERenderer;
+import tileengine.TETile;
+import tileengine.Tileset;
 
 import java.awt.*;
+import java.util.List;
 
 public class Main {
 
@@ -11,6 +14,7 @@ public class Main {
     private static final int WIDTH = 80;
     private static final int HEIGHT = 50;
     private static final int HUD_Height = 2;
+    private static boolean displayPath = false;
 
     public static void main(String[] args) {
         displayMenu();
@@ -91,6 +95,7 @@ public class Main {
         ter.renderFrame(map.world());
         HUD hud = new HUD();
         Point mouse = hud.displayHUD(map);
+        List<Point> previousPath = null;
 
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
@@ -105,17 +110,55 @@ public class Main {
                         System.exit(0);
                     }
                 }
+
                 if (c == 'w' || c == 'W' || c == 'a' || c == 'A' ||
                         c == 's' || c == 'S' || c == 'd' || c == 'D') {
+                    if (previousPath != null) {
+                        for (Point p : previousPath) {
+                            if (map.world()[p.x][p.y] == Tileset.path) {
+                                map.world()[p.x][p.y] = Tileset.floor;
+                            }
+                        }
+                    }
                     map.moveAvatar(c);
+                    map.moveChaser();
+
+                    if (displayPath) {
+                        List<Point> path = map.getPathFinder().findPath(map.chaser(), map.avatar());
+                        if (path != null && path.size() > 1) {
+                            StdDraw.setPenColor(Color.ORANGE);
+                            for (Point p : path) {
+                                if(p.equals(map.chaser()) || p.equals(map.avatar())){
+                                    continue;
+                                }
+                                TETile[][] world = map.world();
+                                world[p.x][p.y] = Tileset.path;
+
+                            }
+                            previousPath = path;
+                        }
+                    }else {
+                        previousPath = null;
+                    }
                     ter.renderFrame(map.world());
                     hud.displayHUD(map);
                     StdDraw.show();
 
+                    if (map.chaser().equals(map.avatar())) {
+                        StdDraw.pause(500);
+                        loseGame();
+                    }
                     if (map.coins().isEmpty()) {
                         StdDraw.pause(500);
-                        endGame();
+                        winGame();
                     }
+                }
+
+                if (c == 'p' || c == 'P') {
+                    displayPath = !displayPath;
+                    ter.renderFrame(map.world());
+                    hud.displayHUD(map);
+                    StdDraw.show();
                 }
             }
 
@@ -130,7 +173,7 @@ public class Main {
         }
     }
 
-    public static void endGame() {
+    public static void winGame() {
         StdDraw.setCanvasSize(WIDTH * 16, (HEIGHT + HUD_Height) * 16);
         Font font = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(font);
@@ -141,6 +184,23 @@ public class Main {
 
         StdDraw.clear(Color.BLACK);
         StdDraw.text(WIDTH / 2, HEIGHT / 2, "You Escaped!");
+        StdDraw.show();
+        StdDraw.pause(5000);
+
+        displayMenu();
+    }
+
+    public static void loseGame() {
+        StdDraw.setCanvasSize(WIDTH * 16, (HEIGHT + HUD_Height) * 16);
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT + HUD_Height);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.enableDoubleBuffering();
+
+        StdDraw.clear(Color.BLACK);
+        StdDraw.text(WIDTH / 2, HEIGHT / 2, "Catch you!");
         StdDraw.show();
         StdDraw.pause(5000);
 
