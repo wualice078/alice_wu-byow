@@ -135,6 +135,7 @@ public class Main {
             int y = (int) StdDraw.mouseY();
 
             if (x != mouse.x || y != mouse.y) {
+                ter.renderFrame(map.world());
                 mouse = hud.displayHUD(map);
             }
 
