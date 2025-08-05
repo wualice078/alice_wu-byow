@@ -7,18 +7,21 @@ import java.awt.*;
 
 public class HUD {
 
-    public void displayHUD(World map) {
+    public Point displayHUD(World map) {
         int x = (int)StdDraw.mouseX();
         int y = (int)StdDraw.mouseY();
         TETile[][] world = map.world();
 
-        StdDraw.setPenColor(StdDraw.CYAN);
-        StdDraw.filledRectangle(map.width() / 2.0, map.height() + 0.5, map.width() / 2.0, 0.5);
+        StdDraw.setPenColor(new Color(201, 201, 201));
+        StdDraw.filledRectangle(map.width() / 2.0, map.height() + 1, map.width() / 2.0, 1);
 
         if (x > 0 && x < map.width() && y > 0 && y < map.height()) {
             TETile tile = world[x][y];
             StdDraw.setPenColor(Color.DARK_GRAY);
-            StdDraw.textLeft(1, map.height() + 0.5, "Tile: " + tile.description());
+            StdDraw.textLeft(1, map.height() + 1, "Tile: " + tile.description());
         }
+
+        StdDraw.show();
+        return new Point(x, y);
     }
 }

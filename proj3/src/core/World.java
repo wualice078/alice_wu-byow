@@ -14,6 +14,7 @@ public class World {
     private final int width;
     private final int height;
     private Point avatar;
+    private Set<Point> coins = new HashSet<>();
 
 
     public World(int w, int h, long seed) {
@@ -29,9 +30,7 @@ public class World {
             }
         }
 
-        System.out.println("generating...");
         generateWorld();
-
     }
 
     public int height() {
@@ -46,24 +45,35 @@ public class World {
         return world;
     }
 
-    public int avatarX() {
-        return avatar.x;
+    public Point avatar() {
+        return avatar;
     }
 
-    public int avatarY() {
-        return avatar.y;
+    public Set<Point> coins() {
+        return coins;
     }
 
-    public void setAvatar(int x, int y) {
-        world[avatar.x][avatar.y] = Tileset.floor;
-        avatar = new Point(x, y);
-        world[x][y] = Tileset.avatar;
+    public void setAvatar(Point avatar) {
+        world[this.avatar.x][this.avatar.y] = Tileset.floor;
+        this.avatar = avatar;
+        world[avatar.x][avatar.y] = Tileset.avatar;
+    }
+
+    public void setCoins(Set<Point> coins) {
+        for (Point coin : this.coins) {
+            world[coin.x][coin.y] = Tileset.floor;
+        }
+        this.coins = coins;
+        for (Point coin : coins) {
+            world[coin.x][coin.y] = Tileset.coin;
+        }
     }
 
     private void generateWorld() {
         Set<Room> rooms = generateRooms();
         generateHallways(rooms);
         generateAvatar();
+        generateCoins();
     }
 
     private void generateAvatar() {
@@ -81,6 +91,7 @@ public class World {
         if (c == 'w' || c == 'W') {
             if (world[avatar.x][avatar.y + 1] != Tileset.wall) {
                 avatar.y++;
+                checkCoin();
                 world[avatar.x][avatar.y] = Tileset.avatar;
                 world[avatar.x][avatar.y - 1] = Tileset.floor;
             }
@@ -88,6 +99,7 @@ public class World {
         if (c == 'a' || c == 'A') {
             if (world[avatar.x - 1][avatar.y] != Tileset.wall) {
                 avatar.x--;
+                checkCoin();
                 world[avatar.x][avatar.y] = Tileset.avatar;
                 world[avatar.x + 1][avatar.y] = Tileset.floor;
             }
@@ -95,6 +107,10 @@ public class World {
         if (c == 's' || c == 'S') {
             if (world[avatar.x][avatar.y - 1] != Tileset.wall) {
                 avatar.y--;
+                checkCoin();
+                if (world[avatar.x][avatar.y] == Tileset.coin) {
+                    this.coins.remove(new Point(avatar.x, avatar.y));
+                }
                 world[avatar.x][avatar.y] = Tileset.avatar;
                 world[avatar.x][avatar.y + 1] = Tileset.floor;
             }
@@ -102,9 +118,33 @@ public class World {
         if (c == 'd' || c == 'D') {
             if (world[avatar.x + 1][avatar.y] != Tileset.wall) {
                 avatar.x++;
+                checkCoin();
                 world[avatar.x][avatar.y] = Tileset.avatar;
                 world[avatar.x - 1][avatar.y] = Tileset.floor;
             }
+        }
+    }
+
+    private void generateCoins() {
+        for (int i = 0; i < 20; i++) {
+            generateCoin();
+        }
+    }
+
+    private void generateCoin() {
+        int x = 0;
+        int y = 0;
+        while(world[x][y] != Tileset.floor || world[x][y] == Tileset.coin || world[x][y] == Tileset.avatar) {
+            x = random.nextInt(3,width - 14);
+            y = random.nextInt(3, height - 14);
+        }
+        world[x][y] = Tileset.coin;
+        this.coins.add(new Point(x, y));
+    }
+
+    private void checkCoin() {
+        if (world[avatar.x][avatar.y] == Tileset.coin) {
+            this.coins.remove(new Point(avatar.x, avatar.y));
         }
     }
 
@@ -151,25 +191,18 @@ public class World {
         drawStraightHallway(turn, p2);
     }
 
-    private boolean valid(int x, int y) {
-        return (x > 0 && x < width - 1) && (y > 0 && y < height - 1);
-    }
-
     private void setHallwayTile(int x, int y) {
-        if (!valid(x, y)) {
-            return;
-        }
         world[x][y] = Tileset.floor;
-        if (valid(x + 1, y) && world[x + 1][y] == Tileset.nothing) {
+        if (world[x + 1][y] == Tileset.nothing) {
             world[x + 1][y] = Tileset.wall;
         }
-        if (valid(x - 1, y) && world[x - 1][y] == Tileset.nothing) {
+        if (world[x - 1][y] == Tileset.nothing) {
             world[x - 1][y] = Tileset.wall;
         }
-        if (valid(x, y + 1) && world[x][y + 1] == Tileset.nothing) {
+        if (world[x][y + 1] == Tileset.nothing) {
             world[x][y + 1] = Tileset.wall;
         }
-        if (valid(x, y - 1) && world[x][y - 1] == Tileset.nothing) {
+        if (world[x][y - 1] == Tileset.nothing) {
             world[x][y - 1] = Tileset.wall;
         }
     }
@@ -178,15 +211,13 @@ public class World {
         Set<Room> rooms = new HashSet<>();
         int numRooms = random.nextInt(14, 18);
 
-        System.out.println("numRooms: " + numRooms);
-
-        while (rooms.size() < numRooms) {
+        int attempts = 0;
+        while (rooms.size() < numRooms && attempts < 1000) {
             Room room = generateRoom();
-            System.out.println("room: " + room.x1() + " " + room.y1() + " " + room.x2() + " " + room.y2());
+            attempts++;
             if(!overLap(room, rooms)) {
                 rooms.add(room);
                 drawRoom(room);
-                System.out.println("~added " + rooms.size() + " rooms~");
             }
         }
 
@@ -194,7 +225,6 @@ public class World {
     }
 
     private void drawRoom(Room r) {
-        System.out.println("drawing...");
         for (int x = r.x1(); x < r.x2(); x++) {
             for (int y = r.y1(); y < r.y2(); y++) {
                 if(x == r.x1() || x == r.x2() - 1|| y == r.y1() || y == r.y2() - 1) {
@@ -207,14 +237,11 @@ public class World {
     }
 
     private boolean overLap(Room room, Set<Room> rooms) {
-        System.out.print("check: ");
         for(Room r : rooms) {
             if(overLap(room, r)) {
-                System.out.println("overlap");
                 return true;
             }
         }
-        System.out.println("no overlap");
         return false;
     }
 
