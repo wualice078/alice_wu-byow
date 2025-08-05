@@ -15,7 +15,8 @@ public class HUD {
         StdDraw.setPenColor(new Color(201, 201, 201));
         StdDraw.filledRectangle(map.width() / 2.0, map.height() + 1, map.width() / 2.0, 1);
         StdDraw.setPenColor(Color.DARK_GRAY);
-        StdDraw.textLeft(20, map.height() + 1, "press p/P to show the path, press again to hide the path");
+        StdDraw.textLeft(34, map.height() + 1, "press (P) to show path");
+        StdDraw.textLeft(68, map.height() + 1, "Shells remaining: " + map.coins().size() + "/20");
 
         if (x > 0 && x < map.width() && y > 0 && y < map.height()) {
             TETile tile = world[x][y];

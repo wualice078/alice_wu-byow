@@ -16,6 +16,7 @@ public class World {
     private final int height;
     private Point avatar;
     private Point chaser;
+    private boolean coin = false;
     private PathFinder pathFinder;
     private Set<Point> coins = new HashSet<>();
 
@@ -34,8 +35,7 @@ public class World {
         }
 
         generateWorld();
-        generateChaser();
-        pathFinder = new PathFinder(chaser, world, width, height);
+        pathFinder = new PathFinder(chaser, world);
     }
 
     public int height() {
@@ -72,6 +72,12 @@ public class World {
         world[avatar.x][avatar.y] = Tileset.avatar;
     }
 
+    public void setChaser(Point chaser) {
+        world[this.chaser.x][this.chaser.y] = Tileset.floor;
+        this.chaser = chaser;
+        world[chaser.x][chaser.y] = Tileset.chaser;
+    }
+
     public void setCoins(Set<Point> coins) {
         for (Point coin : this.coins) {
             world[coin.x][coin.y] = Tileset.floor;
@@ -86,6 +92,7 @@ public class World {
         Set<Room> rooms = generateRooms();
         generateHallways(rooms);
         generateAvatar();
+        generateChaser();
         generateCoins();
     }
 
@@ -104,9 +111,38 @@ public class World {
         List<Point> path = pathFinder.findPath(chaser, avatar);
         if (path.size() > 1) {
             Point next = path.get(1);
-            world[chaser.x][chaser.y] = Tileset.floor;
+            if (coin) {
+                world[chaser.x][chaser.y] = Tileset.coin;
+            } else {
+                world[chaser.x][chaser.y] = Tileset.floor;
+            }
             chaser = next;
-            world[chaser.x][chaser.y] =Tileset.chaser;
+            coin = world[chaser.x][chaser.y] == Tileset.coin;
+            world[chaser.x][chaser.y] = Tileset.chaser;
+        }
+    }
+
+    public List<Point> displayPath() {
+        List<Point> path = pathFinder.findPath(chaser, avatar);
+        if (path != null && path.size() > 1) {
+            for (Point p : path) {
+                if (p.equals(chaser) || p.equals(avatar) || coins.contains(p)) {
+                    continue;
+                }
+                world[p.x][p.y] = Tileset.path;
+            }
+            return path;
+        }
+        return null;
+    }
+
+    public void clearPath(List<Point> previousPath) {
+        if (previousPath != null) {
+            for (Point p : previousPath) {
+                if (world()[p.x][p.y] == Tileset.path) {
+                    world()[p.x][p.y] = Tileset.floor;
+                }
+            }
         }
     }
 
@@ -168,7 +204,7 @@ public class World {
     private void generateCoin() {
         int x = 0;
         int y = 0;
-        while(world[x][y] != Tileset.floor || world[x][y] == Tileset.coin || world[x][y] == Tileset.avatar) {
+        while(world[x][y] != Tileset.floor) {
             x = random.nextInt(3,width - 14);
             y = random.nextInt(3, height - 14);
         }

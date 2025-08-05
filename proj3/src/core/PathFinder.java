@@ -10,14 +10,10 @@ import java.util.List;
 public class PathFinder {
     private Point position;
     private TETile[][] world;
-    private int width;
-    private int height;
 
-    public PathFinder(Point start, TETile[][] world, int width, int height) {
-        position = start;
+    public PathFinder(Point position, TETile[][] world) {
+        this.position = position;
         this.world = world;
-        this.width = width;
-        this.height = height;
     }
 
     public Point getPosition() {
@@ -26,26 +22,6 @@ public class PathFinder {
 
     public void setPosition(Point position) {
         this.position = position;
-    }
-
-    private static class Node{
-        Point point;
-        Node parent;
-        double g; //distance from start
-        double f; //g + h
-
-        public Node(Point point) {
-            this.point = point;
-            g = Double.POSITIVE_INFINITY;
-            f = Double.POSITIVE_INFINITY;
-        }
-
-        public Node(Point point, Node parent, double g, double f) {
-            this.point = point;
-            this.parent = parent;
-            this.g = g;
-            this.f = f;
-        }
     }
 
     private ArrayList<Point> getNeighbors(Point p) {
@@ -57,7 +33,7 @@ public class PathFinder {
         for (int i = 0; i < 4; i++) {
             int newX = x + dx[i];
             int newY = y + dy[i];
-            if (newX > 0 && newX < width && newY > 0 && newY < height) {
+            if (world[newX][newY] != Tileset.wall) {
                 neighbors.add(new Point(newX, newY));
             }
         }
@@ -84,9 +60,6 @@ public class PathFinder {
                 return path(curr);
             }
             for (Point neighbor : getNeighbors(curr.point)) {
-                if (world[neighbor.x][neighbor.y] == Tileset.wall) {
-                    continue;
-                }
                 double newG = curr.g + 1;
                 Node neighborN = all.getOrDefault(neighbor, new Node(neighbor));
                 if (newG < neighborN.g) {
@@ -112,5 +85,25 @@ public class PathFinder {
             curr = curr.parent;
         }
         return path;
+    }
+
+    private static class Node {
+        Point point;
+        Node parent;
+        double g; //distance from start
+        double f; //g + h
+
+        public Node(Point point) {
+            this.point = point;
+            g = Double.POSITIVE_INFINITY;
+            f = Double.POSITIVE_INFINITY;
+        }
+
+        public Node(Point point, Node parent, double g, double f) {
+            this.point = point;
+            this.parent = parent;
+            this.g = g;
+            this.f = f;
+        }
     }
 }
