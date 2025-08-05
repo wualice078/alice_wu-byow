@@ -128,7 +128,7 @@ public class Main {
                         if (path != null && path.size() > 1) {
                             StdDraw.setPenColor(Color.ORANGE);
                             for (Point p : path) {
-                                if(p.equals(map.chaser()) || p.equals(map.avatar())){
+                                if(p.equals(map.chaser()) || p.equals(map.avatar()) || map.coins().contains(p)){
                                     continue;
                                 }
                                 TETile[][] world = map.world();
