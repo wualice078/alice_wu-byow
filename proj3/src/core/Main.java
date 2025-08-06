@@ -79,8 +79,7 @@ public class Main {
                 if (c == 's' || c == 'S' || !isParsable(seed)) {
                     if (isParsable(seed.substring(0, seed.length() - 1))) {
                         SEED = Long.parseLong(seed.substring(0, seed.length() - 1));
-                    }
-                    else {
+                    } else {
                         Random rand = new Random();
                         SEED = rand.nextLong();
                     }
@@ -110,7 +109,7 @@ public class Main {
                     if (c == 'm' || c == 'M'){
                         speed = 16;
                     }
-                    if(c == 'h' || c == 'H') {
+                    if (c == 'h' || c == 'H') {
                         speed = 8;
                     }
                     break;
@@ -180,7 +179,7 @@ public class Main {
 
             StdDraw.pause(5);
 
-            if(chase == speed) {
+            if (chase == speed) {
 
                 if (displayPath) {
                     map.clearPath(previousPath);
