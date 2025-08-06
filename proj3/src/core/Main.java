@@ -7,6 +7,7 @@ import tileengine.Tileset;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Random;
 
 public class Main {
 
@@ -74,7 +75,13 @@ public class Main {
                     StdDraw.show();
                 }
                 if (c == 's' || c == 'S' || !isParsable(seed)) {
-                    SEED = Long.parseLong(seed.substring(0, seed.length() - 1));
+                    if (isParsable(seed.substring(0, seed.length() - 1))) {
+                        SEED = Long.parseLong(seed.substring(0, seed.length() - 1));
+                    }
+                    else {
+                        Random rand = new Random();
+                        SEED = rand.nextLong();
+                    }
                     break;
                 }
             }
