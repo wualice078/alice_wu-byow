@@ -34,7 +34,7 @@ public class Main {
 
         StdDraw.clear(Color.BLACK);
         StdDraw.text(WIDTH / 2, 5 * HEIGHT / 6, "~ Escape the Island ~");
-        StdDraw.text(WIDTH / 2, 6 * HEIGHT / 10, "(N):  New Game");
+        StdDraw.text(WIDTH / 2, 6 * HEIGHT / 10, "(N): New Game");
         StdDraw.text(WIDTH / 2, HEIGHT / 2, "(L): Load Game");
         StdDraw.text(WIDTH / 2, 4 * HEIGHT / 10, "(Q): Quit Game");
         StdDraw.show();
@@ -94,27 +94,16 @@ public class Main {
 
         StdDraw.clear(Color.BLACK);
         StdDraw.text(WIDTH / 2, 5 * HEIGHT / 6, "~ Escape the Island ~");
-        StdDraw.text(WIDTH / 2, HEIGHT / 2 + 4, "Choose the chaser's speed");
-        StdDraw.text(WIDTH / 2 - 10, HEIGHT / 2, "(e)Easy");
-        StdDraw.text(WIDTH / 2, HEIGHT / 2, "(m)Medium");
-        StdDraw.text(WIDTH / 2 + 10, HEIGHT / 2, "(h)Hard");
+        StdDraw.text(WIDTH / 2, 4 * HEIGHT / 6, "Choose the difficulty");
+        StdDraw.text(WIDTH / 2, HEIGHT / 2, "(E): Easy");
+        StdDraw.text(WIDTH / 2, 4 * HEIGHT / 10, "(M): Medium");
+        StdDraw.text(WIDTH / 2, 3 * HEIGHT / 10, "(H): Hard");
         StdDraw.show();
 
         while (true) {
-            String Speed = "";
             if (StdDraw.hasNextKeyTyped()) {
                 char c = StdDraw.nextKeyTyped();
                 if (c == 'e' || c == 'E' || c == 'm' || c == 'M' || c == 'h' || c == 'H') {
-                    Speed += c;
-                    StdDraw.clear(Color.BLACK);
-                    StdDraw.text(WIDTH / 2, 5 * HEIGHT / 6, "~ Escape the Island ~");
-                    StdDraw.text(WIDTH / 2, HEIGHT / 2 +4, "Choose the chaser's speed");
-                    StdDraw.text(WIDTH / 2 - 10, HEIGHT / 2, "(e)Easy");
-                    StdDraw.text(WIDTH / 2, HEIGHT / 2, "(m)Medium");
-                    StdDraw.text(WIDTH / 2 + 10, HEIGHT / 2, "(h)Hard");
-                    StdDraw.text(WIDTH / 2, 4 * HEIGHT / 10, Speed);
-                    StdDraw.show();
-                    StdDraw.pause(1000);
                     if (c == 'e' || c == 'E'){
                         speed = 24;
                     }
