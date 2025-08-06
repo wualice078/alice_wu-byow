@@ -103,10 +103,10 @@ public class Main {
             if (StdDraw.hasNextKeyTyped()) {
                 char c = StdDraw.nextKeyTyped();
                 if (c == 'e' || c == 'E' || c == 'm' || c == 'M' || c == 'h' || c == 'H') {
-                    if (c == 'e' || c == 'E'){
+                    if (c == 'e' || c == 'E') {
                         speed = 24;
                     }
-                    if (c == 'm' || c == 'M'){
+                    if (c == 'm' || c == 'M') {
                         speed = 16;
                     }
                     if (c == 'h' || c == 'H') {
