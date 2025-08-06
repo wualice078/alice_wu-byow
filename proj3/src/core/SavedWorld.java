@@ -12,15 +12,17 @@ public class SavedWorld {
     Point avatar;
     Point chaser;
     Set<Point> coins;
+    int speed;
 
-    public SavedWorld(long seed, Point avatar, Point chaser, Set<Point> coins) {
+    public SavedWorld(long seed, Point avatar, Point chaser, Set<Point> coins, int speed) {
         this.seed = seed;
         this.avatar = avatar;
         this.chaser = chaser;
         this.coins = coins;
+        this.speed = speed;
     }
 
-    public static void save(long seed, Point avatar, Point chaser, Set<Point> coins){
+    public static void save(long seed, Point avatar, Point chaser, Set<Point> coins, int speed){
         try (PrintWriter out = new PrintWriter(new FileOutputStream(SAVE))) {
             out.println(seed);
             out.println(avatar.x + "," + avatar.y);
@@ -28,6 +30,7 @@ public class SavedWorld {
             for (Point coin : coins) {
                 out.println(coin.x + "," + coin.y);
             }
+            out.println(speed);
         } catch (IOException e) {
             System.err.println("Failed to save game: " + e.getMessage());
         }
@@ -53,7 +56,8 @@ public class SavedWorld {
                 coins.add(new Point(Integer.parseInt(cp[0]), Integer.parseInt(cp[1])));
             }
 
-            return new SavedWorld(seed, avatar, chaser, coins);
+            int speed = Integer.parseInt(in.nextLine());
+            return new SavedWorld(seed, avatar, chaser, coins, speed);
 
         } catch(Exception e) {
             System.err.println("Failed to load game: " + e.getMessage());

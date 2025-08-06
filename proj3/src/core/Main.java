@@ -17,6 +17,7 @@ public class Main {
     private static final int HUD_Height = 2;
     private static boolean displayPath = false;
     private static int chase = 0;
+    private static int speed = 0;
 
     public static void main(String[] args) {
         displayMenu();
@@ -43,6 +44,7 @@ public class Main {
                 char c = StdDraw.nextKeyTyped();
                 if (c == 'n' || c == 'N') {
                     receiveSeed();
+                    receiveSpeed();
                     World map = new World(WIDTH, HEIGHT, SEED);
                     startGame(map);
                 } else if (c == 'l' || c == 'L') {
@@ -88,6 +90,46 @@ public class Main {
         }
     }
 
+    public static void receiveSpeed() {
+
+        StdDraw.clear(Color.BLACK);
+        StdDraw.text(WIDTH / 2, 5 * HEIGHT / 6, "~ Escape the Island ~");
+        StdDraw.text(WIDTH / 2, HEIGHT / 2 + 4, "Choose the chaser's speed");
+        StdDraw.text(WIDTH / 2 - 10, HEIGHT / 2, "(e)Easy");
+        StdDraw.text(WIDTH / 2, HEIGHT / 2, "(m)Medium");
+        StdDraw.text(WIDTH / 2 + 10, HEIGHT / 2, "(h)Hard");
+        StdDraw.show();
+
+        while (true) {
+            String Speed = "";
+            if (StdDraw.hasNextKeyTyped()) {
+                char c = StdDraw.nextKeyTyped();
+                if (c == 'e' || c == 'E' || c == 'm' || c == 'M' || c == 'h' || c == 'H') {
+                    Speed += c;
+                    StdDraw.clear(Color.BLACK);
+                    StdDraw.text(WIDTH / 2, 5 * HEIGHT / 6, "~ Escape the Island ~");
+                    StdDraw.text(WIDTH / 2, HEIGHT / 2 +4, "Choose the chaser's speed");
+                    StdDraw.text(WIDTH / 2 - 10, HEIGHT / 2, "(e)Easy");
+                    StdDraw.text(WIDTH / 2, HEIGHT / 2, "(m)Medium");
+                    StdDraw.text(WIDTH / 2 + 10, HEIGHT / 2, "(h)Hard");
+                    StdDraw.text(WIDTH / 2, 4 * HEIGHT / 10, Speed);
+                    StdDraw.show();
+                    StdDraw.pause(1000);
+                    if (c == 'e' || c == 'E'){
+                        speed = 24;
+                    }
+                    if (c == 'm' || c == 'M'){
+                        speed = 16;
+                    }
+                    if(c == 'h' || c == 'H') {
+                        speed = 8;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
     public static boolean isParsable(String s) {
         try {
             Long.parseLong(s);
@@ -115,7 +157,7 @@ public class Main {
                     }
                     char next = StdDraw.nextKeyTyped();
                     if (next == 'q' || next == 'Q') {
-                        SavedWorld.save(SEED, map.avatar(), map.chaser(), map.coins());
+                        SavedWorld.save(SEED, map.avatar(), map.chaser(), map.coins(),speed);
                         System.exit(0);
                     }
                 }
@@ -149,7 +191,7 @@ public class Main {
 
             StdDraw.pause(5);
 
-            if(chase == 8) {
+            if(chase == speed) {
 
                 if (displayPath) {
                     map.clearPath(previousPath);
@@ -160,6 +202,7 @@ public class Main {
                 }
 
                 map.moveChaser();
+
                 ter.renderFrame(map.world());
                 hud.displayHUD(map);
 
@@ -204,6 +247,7 @@ public class Main {
             return;
         }
         SEED = saved.seed;
+        speed = saved.speed;
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT + HUD_Height);
 
