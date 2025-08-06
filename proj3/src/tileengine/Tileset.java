@@ -38,7 +38,7 @@ public class Tileset {
     public static final TETile wall = new TETile('▒', new Color(1,150,29), new Color(148,148,148), "rocks", 13);
     public static final TETile floor = new TETile('▒', new Color(255,233,161), new Color(255,247,197), "sand", 14);
     public static final TETile avatar = new TETile('■', new Color(135,200,255), new Color(255,247,197), "you", 15);
-    public static final TETile coin = new TETile('◉', new Color(234, 190, 255), new Color(255,247,197), "shell", 16);
+    public static final TETile coin = new TETile('◉', new Color(234, 190, 230), new Color(255,247,197), "shell", 16);
     public static final TETile chaser = new TETile('■', new Color(183, 148, 114), new Color(255,247,197), "pirate", 17);
     public static final TETile path = new TETile('•', new Color(255,180,180), new Color(255,247,197), "path", 18);
 
