@@ -138,13 +138,16 @@ public class Main {
                 }
             }
 
+            StdDraw.pause(5);
+
             int x = (int) StdDraw.mouseX();
             int y = (int) StdDraw.mouseY();
 
             if (x != mouse.x || y != mouse.y) {
-                ter.renderFrame(map.world());
                 mouse = hud.displayHUD(map);
             }
+
+            StdDraw.pause(5);
 
             if(chase == 8) {
 
@@ -169,7 +172,7 @@ public class Main {
             }
 
             chase++;
-            StdDraw.pause(20);
+            StdDraw.pause(5);
         }
     }
 

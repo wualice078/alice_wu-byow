@@ -40,7 +40,6 @@ public class TERenderer {
         StdDraw.clear(new Color(0, 0, 0));
 
         StdDraw.enableDoubleBuffering();
-        StdDraw.show();
     }
 
     /**
@@ -85,7 +84,6 @@ public class TERenderer {
     public void renderFrame(TETile[][] world) {
         StdDraw.clear(new Color(0, 0, 0));
         drawTiles(world);
-        StdDraw.show();
     }
 
     /**
