@@ -136,6 +136,7 @@ public class Main {
         ter.renderFrame(map.world());
         HUD hud = new HUD();
         Point mouse = hud.displayHUD(map);
+        displayPath = false;
         List<Point> previousPath = null;
         StdDraw.pause(1000);
 
