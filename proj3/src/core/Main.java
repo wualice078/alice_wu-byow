@@ -86,6 +86,7 @@ public class Main {
                     break;
                 }
             }
+            StdDraw.pause(10);
         }
     }
 
@@ -114,6 +115,7 @@ public class Main {
                     }
                     break;
                 }
+                StdDraw.pause(10);
             }
         }
     }
