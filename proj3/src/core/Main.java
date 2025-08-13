@@ -150,7 +150,7 @@ public class Main {
         Point mouse = hud.displayHUD(map);
         displayPath = false;
         List<Point> previousPath = null;
-        StdDraw.pause(1000);
+        flashAvatar(ter, map, hud);
 
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
@@ -220,6 +220,19 @@ public class Main {
 
             chase++;
             StdDraw.pause(5);
+        }
+    }
+
+    public static void flashAvatar(TERenderer ter, World map, HUD hud) {
+        for (int i = 0; i < 4; i++) {
+            StdDraw.pause(200);
+            map.world()[map.avatar().x][map.avatar().y] = Tileset.floor;
+            ter.renderFrame(map.world());
+            hud.displayHUD(map);
+            StdDraw.pause(100);
+            map.world()[map.avatar().x][map.avatar().y] = Tileset.avatar;
+            ter.renderFrame(map.world());
+            hud.displayHUD(map);
         }
     }
 
