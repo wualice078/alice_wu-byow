@@ -96,24 +96,36 @@ public class Main {
         StdDraw.clear(Color.BLACK);
         StdDraw.text(WIDTH / 2, 5 * HEIGHT / 6, "~ Escape the Island ~");
         StdDraw.text(WIDTH / 2, 4 * HEIGHT / 6, "Choose the difficulty");
-        StdDraw.text(WIDTH / 2, HEIGHT / 2, "(E): Easy");
-        StdDraw.text(WIDTH / 2, 4 * HEIGHT / 10, "(M): Medium");
-        StdDraw.text(WIDTH / 2, 3 * HEIGHT / 10, "(H): Hard");
+        Font font = new Font("Monaco", Font.BOLD, 20);
+        StdDraw.setFont(font);
+        StdDraw.textLeft(WIDTH / 2 - 4, (double) (8 * HEIGHT) / 15, "(E): Easy");
+        StdDraw.textLeft(WIDTH / 2 - 4, (double) (7 * HEIGHT) / 15, "(M): Medium");
+        StdDraw.textLeft(WIDTH / 2 - 4, (double) (6 * HEIGHT) / 15, "(H): Hard");
+        StdDraw.textLeft(WIDTH / 2 - 4, (double) (5 * HEIGHT) / 15, "(X): Extreme");
+        StdDraw.textLeft(WIDTH / 2 - 4, (double) (4 * HEIGHT) / 15, "(S): Master");
         StdDraw.show();
 
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char c = StdDraw.nextKeyTyped();
-                if (c == 'e' || c == 'E' || c == 'm' || c == 'M' || c == 'h' || c == 'H') {
-                    if (c == 'e' || c == 'E') {
-                        speed = 24;
-                    }
-                    if (c == 'm' || c == 'M') {
-                        speed = 16;
-                    }
-                    if (c == 'h' || c == 'H') {
-                        speed = 8;
-                    }
+                if (c == 'e' || c == 'E') {
+                    speed = 20;
+                    break;
+                }
+                if (c == 'm' || c == 'M') {
+                    speed = 12;
+                    break;
+                }
+                if (c == 'h' || c == 'H') {
+                    speed = 8;
+                    break;
+                }
+                if (c == 'x' || c == 'X') {
+                    speed = 6;
+                    break;
+                }
+                if (c == 's' || c == 'S') {
+                    speed = 5;
                     break;
                 }
             }
