@@ -20,8 +20,10 @@
 .idea/shelf/
 .idea/dictionaries/
 
-# Other editors
-**/.vscode/
+# VS Code: commit the shared project config so it resolves lib/ on clone,
+# but ignore per-user files.
+.vscode/*
+!.vscode/settings.json
 **/.history/
 .classpath
 .project

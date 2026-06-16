@@ -1,12 +1,10 @@
 # Escape the Island
 
 A 2D tile-based game built for UC Berkeley's CS61BL *Build Your Own World* (BYOW)
-project. You play as the avatar (`@`) stranded on a procedurally generated island
+project. You play as the avatar stranded on a psuedorandomly generated island
 of rooms and hallways. Collect all **20 shells** scattered across the map to
 escape — but a pirate hunts you down using A\* pathfinding. Grab every shell to
 win; get caught and you lose.
-
-![tiles: @ player, $ shells, pirate chaser](https://img.shields.io/badge/CS61BL-BYOW-blue)
 
 ## Features
 
@@ -44,7 +42,17 @@ win; get caught and you lose.
 3. Open [`proj3/src/core/Main.java`](proj3/src/core/Main.java) and click the
    green ▶ next to `main`.
 
-### Option B — Command line
+### Option B — VS Code
+
+1. Install the **Extension Pack for Java** (Microsoft) if you haven't already.
+2. Open the project folder. The bundled [`.vscode/settings.json`](.vscode/settings.json)
+   tells the Java extension where the source and `lib/algs4.jar` are, so imports
+   resolve automatically. Make sure a JDK 20+ is selected (command palette →
+   *Java: Configure Java Runtime*).
+3. Open [`proj3/src/core/Main.java`](proj3/src/core/Main.java) and click **Run**
+   above `main`.
+
+### Option C — Command line (any OS, no IDE)
 
 From the repo root:
 
@@ -57,7 +65,8 @@ javac -cp "lib/*" -d out/production/project-3-byow-Sunrise \
 java -cp "out/production/project-3-byow-Sunrise:lib/*" core.Main
 ```
 
-> On Windows, use `;` instead of `:` as the classpath separator.
+> On Windows, use `;` instead of `:` as the classpath separator, and
+> `dir /s /b proj3\src\*.java` in place of the `find` command.
 
 ## Controls
 

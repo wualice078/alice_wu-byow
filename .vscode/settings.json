@@ -1,0 +1,5 @@
+{
+  "java.project.sourcePaths": ["proj3/src"],
+  "java.project.outputPath": "out/production/project-3-byow-Sunrise",
+  "java.project.referencedLibraries": ["lib/**/*.jar"]
+}
