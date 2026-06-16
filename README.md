@@ -32,7 +32,22 @@ win; get caught and you lose.
 
 ## Run it
 
-### Option A — IntelliJ IDEA (easiest)
+You only need a **JDK 20+** — no IDE, no build tool. The project is plain Java
+plus the bundled `lib/algs4.jar`, so it builds and runs anywhere Java is
+installed. Pick whichever option suits you; they all run the same code.
+
+### Quickest — run script
+
+From the repo root:
+
+```bash
+./run.sh      # macOS / Linux
+run.bat       # Windows
+```
+
+This compiles everything and launches the game in one step.
+
+### Option A — IntelliJ IDEA
 
 1. Clone the repo and open the folder in IntelliJ (**File → Open**, select the
    project folder).
