@@ -1,86 +1,28 @@
-### IntelliJ IDEA ###
+# Compiled output
 **/out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### Eclipse ###
-**/.apt_generated
-**/.classpath
-**/.factorypath
-**/.project
-**/.settings
-**/.springBeans
-**/.sts4-cache
 **/bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+*.class
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
-**/.vscode/
-**/.history/
-
-### Mac OS ###
+# macOS
 .DS_Store
 
-**/.idea/**/workspace.xml
-**/.idea/**/tasks.xml
-**/.idea/**/usage.statistics.xml
-**/.idea/**/dictionaries
-**/.idea/**/shelf
+# IntelliJ: commit the shared project config (.iml, modules.xml, misc.xml,
+# vcs.xml, libraries/) so the project opens & runs on clone, but ignore the
+# per-user / high-churn files.
+.idea/*
+!.idea/libraries/
+!.idea/misc.xml
+!.idea/modules.xml
+!.idea/vcs.xml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/shelf/
+.idea/dictionaries/
 
-# AWS User-specific
-**/.idea/**/aws.xml
-
-# Generated files
-**/.idea/**/contentModel.xml
-
-# Sensitive or high-churn files
-**/.idea/**/dataSources/
-**/.idea/**/dataSources.ids
-**/.idea/**/dataSources.local.xml
-**/.idea/**/sqlDataSources.xml
-**/.idea/**/dynamic.xml
-**/.idea/**/uiDesigner.xml
-**/.idea/**/dbnavigator.xml
-
-# Gradle
-**/.idea/**/gradle.xml
-**/.idea/**/libraries
-
-# Project 2a
-synsets.txt
-hyponyms.txt
-all_words.csv
-total_counts.csv
-top_14377_words.csv
-top_49887_words.csv
-words_that_start_with_q.csv
-hyponyms1000-subgraph.txt
-synsets1000-subgraph.txt
-
-# Please don't unles you know what you're doing
-*.iml
-**/.idea/**
-
-# Content stuff
-**/*.aux
-**/*.fdb_latexmk
-**/*.fls
-**/*.log
-**/*.synctex.gz
-**/*.synctex.gz\(busy\)
-**/*.synctex\(busy\)
-**/*.out
-# to prevent recompilation
-**/main.pdf
-
-# Exam stuff
-exams/*.pdf
-exams/*.bin
+# Other editors
+**/.vscode/
+**/.history/
+.classpath
+.project
+.settings/
