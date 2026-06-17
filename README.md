@@ -6,6 +6,8 @@ of rooms and hallways. Collect all **20 shells** scattered across the map to
 escape — but a pirate hunts you down using A\* pathfinding. Grab every shell to
 win; get caught and you lose.
 
+![Escape the Island gameplay — the menu, collecting shells, hovering tiles, and the A* path overlay](assets/demo.gif)
+
 ## Features
 
 - **Procedural generation** — 14–17 non-overlapping rooms connected by
